@@ -2,7 +2,7 @@
   "name": "mojing-novel-engine",
   "version": "1.0.0",
   "description": "墨境·高概念网文AI创作引擎 - 基于7个真相文件的专业网文创作工具",
-  "main": "electron/main.js",
+  "main": "main.js",
   "author": "MoJing Team",
   "license": "MIT",
   "scripts": {
@@ -14,10 +14,9 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "dependencies": {
-    "electron": "^28.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "electron": "^28.0.0",
     "electron-builder": "^24.9.1"
   },
   "build": {
