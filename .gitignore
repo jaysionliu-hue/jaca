@@ -1,0 +1,1 @@
+node_modules/\n__pycache__/\n*.pyc\ndist/\nbuild/\n*.exe\n.env\n

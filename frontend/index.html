@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨境·高概念网文AI创作引擎</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">墨</span>
+                    <span class="logo-text">墨境</span>
+                </div>
+                <div class="project-selector" id="projectSelector">
+                    <button class="btn btn-secondary" onclick="showProjectModal()">
+                        <span class="icon">📁</span>
+                        <span id="currentProjectName">选择项目</span>
+                    </button>
+                </div>
+            </div>
+            <div class="header-center">
+                <h1 class="app-title">高概念网文AI创作引擎</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-icon" onclick="showSettingsModal()" title="设置">⚙️</button>
+                <button class="btn btn-icon" onclick="showHelpModal()" title="帮助">❓</button>
+            </div>
+        </header>
+
+        <!-- 标签页导航 -->
+        <nav class="tab-nav">
+            <div class="tab-list" id="tabList">
+                <button class="tab-btn active" data-tab="world">🌍 世界观</button>
+                <button class="tab-btn" data-tab="character">👤 角色</button>
+                <button class="tab-btn" data-tab="plot">📖 剧情</button>
+                <button class="tab-btn" data-tab="theme">💡 主题</button>
+                <button class="tab-btn" data-tab="style">✍️ 文风</button>
+                <button class="tab-btn" data-tab="structure">🏗️ 结构</button>
+                <button class="tab-btn" data-tab="golden">✨ 黄金</button>
+                <button class="tab-btn" data-tab="validate">🔍 校验</button>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 世界观标签页 -->
+            <section class="tab-content active" id="tab-world">
+                <div class="content-header">
+                    <h2>🌍 世界观真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('world')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('world')">保存</button>
+                    </div>
+                </div>
+                <div class="truth-editor">
+                    <div class="form-group">
+                        <label>世界名称</label>
+                        <input type="text" id="world-name" placeholder="输入世界名称" onchange="markDirty()">
+                    </div>
+                    <div class="form-group">
+                        <label>类型标签</label>
+                        <div class="tag-input" id="world-genres">
+                            <input type="text" placeholder="输入类型，按回车添加" onkeypress="addTag(event, 'world-genres')">
+                            <div class="tags-list"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>时代设定</label>
+                            <select id="world-time-setting">
+                                <option value="">请选择</option>
+                                <option value="ancient">古代</option>
+                                <option value="medieval">中世纪</option>
+                                <option value="modern">近现代</option>
+                                <option value="future">未来</option>
+                                <option value="fantasy">架空</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>地域设定</label>
+                            <select id="world-location-setting">
+                                <option value="">请选择</option>
+                                <option value="continent">大陆</option>
+                                <option value="island">岛屿</option>
+                                <option value="multiple">多界域</option>
+                                <option value="cosmic">星际</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>文化规则</label>
+                        <textarea id="world-cultural-rules" rows="3" placeholder="每行一条文化规则" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>社会结构</label>
+                        <textarea id="world-social-structure" rows="3" placeholder="描述社会阶层、组织等" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>力量体系</label>
+                        <div class="power-system-editor">
+                            <input type="text" id="power-name" placeholder="力量体系名称" onchange="markDirty()">
+                            <textarea id="power-rules" rows="3" placeholder="力量规则描述" onchange="markDirty()"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>禁忌事项</label>
+                        <textarea id="world-taboos" rows="2" placeholder="这个世界的绝对禁忌" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>核心价值</label>
+                        <textarea id="world-core-values" rows="2" placeholder="这个世界最核心的价值观念" onchange="markDirty()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 角色标签页 -->
+            <section class="tab-content" id="tab-character">
+                <div class="content-header">
+                    <h2>👤 角色真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('character')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="addCharacter()">添加角色</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('character')">保存</button>
+                    </div>
+                </div>
+                <div class="character-list" id="characterList">
+                    <div class="empty-state">
+                        <p>暂无角色</p>
+                        <button class="btn btn-primary" onclick="addCharacter()">添加第一个角色</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 剧情标签页 -->
+            <section class="tab-content" id="tab-plot">
+                <div class="content-header">
+                    <h2>📖 剧情真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('plot')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('plot')">保存</button>
+                    </div>
+                </div>
+                <div class="truth-editor">
+                    <div class="form-group">
+                        <label>主线剧情</label>
+                        <textarea id="plot-main-plot" rows="4" placeholder="描述故事的主线" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>支线剧情</label>
+                        <div id="sub-plots-list" class="sub-items-list">
+                            <button class="btn btn-small" onclick="addSubPlot()">+ 添加支线</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>冲突链</label>
+                        <textarea id="plot-conflicts" rows="3" placeholder="主要的冲突事件链" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>转折点</label>
+                        <div id="turning-points-list" class="sub-items-list">
+                            <button class="btn btn-small" onclick="addTurningPoint()">+ 添加转折点</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>结局类型</label>
+                            <select id="plot-ending-type">
+                                <option value="">请选择</option>
+                                <option value="happy">圆满结局</option>
+                                <option value="bittersweet">苦乐参半</option>
+                                <option value="tragic">悲剧结局</option>
+                                <option value="open">开放式结局</option>
+                                <option value="twist">反转结局</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>伏笔设置</label>
+                        <textarea id="plot-foreshadowing" rows="3" placeholder="埋下的伏笔" onchange="markDirty()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 主题标签页 -->
+            <section class="tab-content" id="tab-theme">
+                <div class="content-header">
+                    <h2>💡 主题真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('theme')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('theme')">保存</button>
+                    </div>
+                </div>
+                <div class="truth-editor">
+                    <div class="form-group">
+                        <label>核心主题</label>
+                        <div class="tag-input" id="theme-core-themes">
+                            <input type="text" placeholder="输入核心主题，按回车添加" onkeypress="addTag(event, 'theme-core-themes')">
+                            <div class="tags-list"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>副主题</label>
+                        <div class="tag-input" id="theme-sub-themes">
+                            <input type="text" placeholder="输入副主题，按回车添加" onkeypress="addTag(event, 'theme-sub-themes')">
+                            <div class="tags-list"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>情感弧线</label>
+                        <div class="emotion-arc-editor">
+                            <textarea id="theme-emotion-arcs" rows="3" placeholder="描述故事的情感变化轨迹" onchange="markDirty()"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>象征元素</label>
+                        <textarea id="theme-symbolic" rows="3" placeholder="具有象征意义的物品/场景/意象" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>哲学追问</label>
+                        <textarea id="theme-philosophy" rows="3" placeholder="故事想要探讨的哲学问题" onchange="markDirty()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 文风标签页 -->
+            <section class="tab-content" id="tab-style">
+                <div class="content-header">
+                    <h2>✍️ 文风真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('style')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('style')">保存</button>
+                    </div>
+                </div>
+                <div class="truth-editor">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>叙事视角</label>
+                            <select id="style-perspective">
+                                <option value="">请选择</option>
+                                <option value="first">第一人称</option>
+                                <option value="third-limited">第三人称限视</option>
+                                <option value="third-omniscient">第三人称全知</option>
+                                <option value="second">第二人称</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>语言风格</label>
+                            <select id="style-language-level">
+                                <option value="">请选择</option>
+                                <option value="literary">文学性强</option>
+                                <option value="popular">通俗易懂</option>
+                                <option value="concise">简洁有力</option>
+                                <option value="ornate">华丽辞藻</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>整体基调</label>
+                            <select id="style-tone">
+                                <option value="">请选择</option>
+                                <option value="serious">严肃深沉</option>
+                                <option value="humorous">轻松幽默</option>
+                                <option value="romantic">浪漫温情</option>
+                                <option value="dark">黑暗压抑</option>
+                                <option value="epic">史诗壮阔</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>节奏把控</label>
+                            <select id="style-pacing">
+                                <option value="">请选择</option>
+                                <option value="fast">快节奏</option>
+                                <option value="slow">慢节奏</option>
+                                <option value="varied">张弛有度</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>对话风格</label>
+                        <textarea id="style-dialogue" rows="2" placeholder="对话的特点和风格" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>描写风格</label>
+                        <textarea id="style-description" rows="2" placeholder="环境/动作/心理描写的特点" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>禁止元素</label>
+                        <textarea id="style-prohibited" rows="2" placeholder="文风中避免出现的元素" onchange="markDirty()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>标志性元素</label>
+                        <textarea id="style-signature" rows="2" placeholder="独特的文风标签/习惯" onchange="markDirty()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 结构标签页 -->
+            <section class="tab-content" id="tab-structure">
+                <div class="content-header">
+                    <h2>🏗️ 结构真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('structure')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('structure')">保存</button>
+                    </div>
+                </div>
+                <div class="truth-editor">
+                    <div class="form-group">
+                        <label>叙事弧</label>
+                        <div id="story-arcs-list" class="arcs-editor">
+                            <div class="arc-item">
+                                <span class="arc-name">开篇</span>
+                                <input type="text" placeholder="开篇描述">
+                            </div>
+                            <div class="arc-item">
+                                <span class="arc-name">发展</span>
+                                <input type="text" placeholder="发展描述">
+                            </div>
+                            <div class="arc-item">
+                                <span class="arc-name">高潮</span>
+                                <input type="text" placeholder="高潮描述">
+                            </div>
+                            <div class="arc-item">
+                                <span class="arc-name">结局</span>
+                                <input type="text" placeholder="结局描述">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>章节大纲</label>
+                        <div id="chapter-outline" class="chapter-outline">
+                            <button class="btn btn-small" onclick="addChapter()">+ 添加章节</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>时间线</label>
+                        <div id="timeline-editor" class="timeline-editor">
+                            <button class="btn btn-small" onclick="addTimelineItem()">+ 添加时间点</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 黄金标签页 -->
+            <section class="tab-content" id="tab-golden">
+                <div class="content-header">
+                    <h2>✨ 黄金真相</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="generateContent('golden')">AI生成</button>
+                        <button class="btn btn-secondary" onclick="addGoldenElement()">添加黄金元素</button>
+                        <button class="btn btn-secondary" onclick="saveCurrentTab('golden')">保存</button>
+                    </div>
+                </div>
+                <div class="golden-section">
+                    <h3>🌟 黄金台词</h3>
+                    <div id="golden-dialogues" class="golden-list">
+                        <button class="btn btn-small" onclick="addGoldenDialogue()">+ 添加黄金台词</button>
+                    </div>
+                </div>
+                <div class="golden-section">
+                    <h3>🔥 高潮场景</h3>
+                    <div id="climactic-scenes" class="golden-list">
+                        <button class="btn btn-small" onclick="addClimacticScene()">+ 添加高潮场景</button>
+                    </div>
+                </div>
+                <div class="golden-section">
+                    <h3>💎 关键名场面</h3>
+                    <div id="key-moments" class="golden-list">
+                        <button class="btn btn-small" onclick="addKeyMoment()">+ 添加名场面</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 校验标签页 -->
+            <section class="tab-content" id="tab-validate">
+                <div class="content-header">
+                    <h2>🔍 规则校验</h2>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="runValidation()">运行校验</button>
+                        <button class="btn btn-secondary" onclick="showRulesInfo()">规则说明</button>
+                    </div>
+                </div>
+                <div class="validation-results" id="validationResults">
+                    <div class="empty-state">
+                        <p>点击「运行校验」检查故事设定的一致性</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部状态栏 -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span id="saveStatus" class="save-status">已保存</span>
+            </div>
+            <div class="footer-center">
+                <span id="autoSaveStatus"></span>
+            </div>
+            <div class="footer-right">
+                <span id="version">v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 项目管理模态框 -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📁 项目管理</h3>
+                <button class="btn-close" onclick="closeModal('projectModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="project-actions">
+                    <button class="btn btn-primary" onclick="showCreateProject()">新建项目</button>
+                    <button class="btn btn-secondary" onclick="showImportProject()">导入项目</button>
+                </div>
+                <div id="projectList" class="project-list">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建项目表单 -->
+    <div class="modal" id="createProjectModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>✨ 新建项目</h3>
+                <button class="btn-close" onclick="closeModal('createProjectModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>项目名称</label>
+                    <input type="text" id="newProjectName" placeholder="输入项目名称">
+                </div>
+                <div class="form-group">
+                    <label>项目描述</label>
+                    <textarea id="newProjectDesc" rows="3" placeholder="简短描述"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('createProjectModal')">取消</button>
+                    <button class="btn btn-primary" onclick="createProject()">创建</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ 设置</h3>
+                <button class="btn-close" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h4>自动保存</h4>
+                    <label class="switch">
+                        <input type="checkbox" id="autoSaveToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>启用自动保存（每30秒）</span>
+                </div>
+                <div class="settings-group">
+                    <h4>API 配置</h4>
+                    <div class="form-group">
+                        <label>API 地址</label>
+                        <input type="text" id="apiEndpoint" placeholder="http://127.0.0.1:8765">
+                    </div>
+                    <button class="btn btn-secondary" onclick="testConnection()">测试连接</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 帮助模态框 -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>❓ 帮助指南</h3>
+                <button class="btn-close" onclick="closeModal('helpModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h4>关于墨境</h4>
+                    <p>墨境是一款基于「7个真相文件」的高概念网文AI创作引擎，帮助作者系统化构建故事世界。</p>
+                </div>
+                <div class="help-section">
+                    <h4>7个真相文件</h4>
+                    <ul>
+                        <li>🌍 世界观真相 - 故事发生的世界设定</li>
+                        <li>👤 角色真相 - 人物的性格与成长</li>
+                        <li>📖 剧情真相 - 故事的主线与转折</li>
+                        <li>💡 主题真相 - 故事的核心思想</li>
+                        <li>✍️ 文风真相 - 独特的写作风格</li>
+                        <li>🏗️ 结构真相 - 叙事节奏与章节</li>
+                        <li>✨ 黄金真相 - 点睛之笔的设计</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h4>快捷键</h4>
+                    <ul>
+                        <li>Ctrl+S - 保存当前页面</li>
+                        <li>Ctrl+Tab - 切换标签页</li>
+                        <li>Ctrl+N - 新建项目</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 生成模态框 -->
+    <div class="modal" id="aiGenerateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🤖 AI 创作助手</h3>
+                <button class="btn-close" onclick="closeModal('aiGenerateModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="aiContent" class="ai-content">
+                    <div class="loading">正在生成...</div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('aiGenerateModal')">关闭</button>
+                    <button class="btn btn-primary" onclick="applyAiContent()">应用建议</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

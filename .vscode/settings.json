@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "墨境",
+      "git": true
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/release": true
+    },
+    "files.associations": {
+      "*.mj": "json"
+    }
+  },
+  "extensions": []
+}

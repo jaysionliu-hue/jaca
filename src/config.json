@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "name": "墨境",
+  "description": "基于7个真相文件的高概念网文AI创作引擎",
+  "api_endpoint": "http://127.0.0.1:8765",
+  "auto_save": true,
+  "auto_save_interval": 30000,
+  "theme": "dark",
+  "language": "zh-CN"
+}
